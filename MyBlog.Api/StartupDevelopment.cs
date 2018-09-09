@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using MyBlog.Core.interfaces;
 using MyBlog.Infrastructure.DataBase;
+using MyBlog.Infrastructure.Repositories;
 
 namespace MyBlog.Api
 {
@@ -26,6 +28,8 @@ namespace MyBlog.Api
                 options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
                 options.HttpsPort = 5001;
             });
+
+            services.AddScoped<IPostRepository, PostRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

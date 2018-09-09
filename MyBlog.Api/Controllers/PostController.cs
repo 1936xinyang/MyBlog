@@ -11,15 +11,12 @@ namespace MyBlog.Api.Controllers
     [Route("api/posts")]
     public class PostController : Controller
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
         private readonly MyContext _myContext;
         public PostController(MyContext myContext)
         {
             _myContext = myContext;
         }
+        [HttpGet]
         public async Task<IActionResult> Get()
         {
             var posts = await _myContext.Posts.ToListAsync();

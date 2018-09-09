@@ -6,7 +6,7 @@ namespace MyBlog.Core.Entities
 {
     public class Post:Entity
     {
-        protected new int Id { get; set; }
+
         public string Title { get; set; }
         public string Author { get; set; }
         public string Body { get; set; }
