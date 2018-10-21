@@ -1,4 +1,4 @@
-﻿using MyBlog.Core.interfaces;
+﻿using MyBlog.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;

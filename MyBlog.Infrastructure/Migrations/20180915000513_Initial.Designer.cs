@@ -9,7 +9,7 @@ using MyBlog.Infrastructure.DataBase;
 namespace MyBlog.Infrastructure.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20180909014025_Initial")]
+    [Migration("20180915000513_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

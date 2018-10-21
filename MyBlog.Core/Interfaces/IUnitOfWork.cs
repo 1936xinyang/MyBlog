@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MyBlog.Core.Interfaces
 {
-    public interface IEntity
+    public interface IUnitOfWork
     {
-         int Id { get; set; }
+        Task<bool> SaveAsync();
     }
 }

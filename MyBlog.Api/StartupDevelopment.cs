@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using MyBlog.Core.interfaces;
+using MyBlog.Core.Interfaces;
 using MyBlog.Infrastructure.DataBase;
 using MyBlog.Infrastructure.Repositories;
+using MyBlog.Infrastructure.Resources;
 
 namespace MyBlog.Api
 {
@@ -30,6 +33,9 @@ namespace MyBlog.Api
             });
 
             services.AddScoped<IPostRepository, PostRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddAutoMapper();
+            services.AddTransient<IValidator<PostResource>,PostResourceValidator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
