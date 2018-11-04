@@ -1,31 +1,47 @@
-﻿using MyBlog.Infrastructure.DataBase;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using MyBlog.Core.Entities;
-using System.Threading.Tasks;
 using MyBlog.Core.Interfaces;
+using MyBlog.Infrastructure.DataBase;
+using MyBlog.Infrastructure.Extensions;
+using MyBlog.Infrastructure.Resources;
+using MyBlog.Infrastructure.Services;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MyBlog.Infrastructure.Repositories
 {
     public class PostRepository:IPostRepository
     {
         private readonly MyContext _myContext;
+        private readonly IPropertyMappingContainer _propertyMappingContainer;
         public PostRepository(MyContext myContext)
         {
             _myContext = myContext;
         }
-        public async Task<IEnumerable<Post>> GetAllPostsAsync()
+        public async Task<PaginatedList<Post>> GetAllPostsAsync(PostParameters postParameters)
         {
-            return await _myContext.Posts.ToListAsync();
+            var query = _myContext.Posts.AsQueryable();
 
+            if (!string.IsNullOrEmpty(postParameters.Title))
+            {
+                var title = postParameters.Title.ToLowerInvariant();
+                query = query.Where(x => x.Title.ToLowerInvariant() == title);
+            }
+
+            query = query.ApplySort(postParameters.OrderBy, _propertyMappingContainer.Resolve<PostResource, Post>());
+
+            var count = await query.CountAsync();
+            var data = await query
+                .Skip(postParameters.PageIndex * postParameters.PageSize)
+                .Take(postParameters.PageSize)
+                .ToListAsync();
+
+            return new PaginatedList<Post>(postParameters.PageIndex, postParameters.PageSize, count, data);
         }
-        public async Task<Post> GetAllPostByIdAsync(int id)
+
+        public async Task<Post> GetPostByIdAsync(int id)
         {
             return await _myContext.Posts.FindAsync(id);
-
         }
 
         public void AddPost(Post post)
