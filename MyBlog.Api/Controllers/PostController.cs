@@ -175,10 +175,14 @@ namespace MyBlog.Api.Controllers
                 Title = "Title A",
                 LastModified = DateTime.Now
             };
+            try {
+                _postRepository.AddPost(newPost);
 
-            _postRepository.AddPost(newPost);
-
-            await _unitOfWork.SaveAsync();
+                await _unitOfWork.SaveAsync();
+            }
+            catch (Exception ex) {
+            }
+           
 
             return Ok();
         }

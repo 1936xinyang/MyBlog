@@ -5,19 +5,24 @@ using MyBlog.Infrastructure.DataBase;
 using MyBlog.Infrastructure.Extensions;
 using MyBlog.Infrastructure.Resources;
 using MyBlog.Infrastructure.Services;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace MyBlog.Infrastructure.Repositories
 {
-    public class PostRepository:IPostRepository
+    public class PostRepository : IPostRepository
     {
         private readonly MyContext _myContext;
         private readonly IPropertyMappingContainer _propertyMappingContainer;
-        public PostRepository(MyContext myContext)
+
+        public PostRepository(MyContext myContext,
+            IPropertyMappingContainer propertyMappingContainer)
         {
             _myContext = myContext;
+            _propertyMappingContainer = propertyMappingContainer;
         }
+
         public async Task<PaginatedList<Post>> GetAllPostsAsync(PostParameters postParameters)
         {
             var query = _myContext.Posts.AsQueryable();
@@ -41,6 +46,14 @@ namespace MyBlog.Infrastructure.Repositories
 
         public async Task<Post> GetPostByIdAsync(int id)
         {
+            try
+            {
+                var tt = _myContext.Posts;
+            }
+            catch (Exception ex)
+            {
+            }
+            
             return await _myContext.Posts.FindAsync(id);
         }
 
@@ -48,7 +61,5 @@ namespace MyBlog.Infrastructure.Repositories
         {
             _myContext.Posts.Add(post);
         }
-
-        
     }
 }
